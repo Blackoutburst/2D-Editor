@@ -24,8 +24,6 @@ fun update() {
 
         Window.clear()
 
-
-
         Grid.render()
         text.render()
 
