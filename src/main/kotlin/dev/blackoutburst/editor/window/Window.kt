@@ -71,8 +71,6 @@ object Window {
 
     fun clear() {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
-        glEnable(GL_CULL_FACE)
-        glEnable(GL_DEPTH_TEST)
     }
 
     fun destroy() {

@@ -73,8 +73,8 @@ object Grid {
         val vertexArray = mutableListOf<Float>()
         val indexArray = mutableListOf<Int>()
 
-        val width = ceil(Window.width.toFloat() / SIZE) * SIZE + SIZE
-        val height = ceil(Window.height.toFloat() / SIZE) * SIZE + SIZE
+        val width = ceil(Window.width.toFloat() / SIZE) * SIZE + (SIZE * 10)
+        val height = ceil(Window.height.toFloat() / SIZE) * SIZE + (SIZE * 10)
 
         for (x in 0 .. 20) {
             vertexArray.addAll(listOf(SIZE * x.toFloat(), 0f, 0f, 0.2f, 0.2f, 0.2f, 1f))
