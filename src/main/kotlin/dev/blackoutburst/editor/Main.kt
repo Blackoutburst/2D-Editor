@@ -1,6 +1,7 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.editor.camera.Camera
+import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.editor.graphics.Text
 import dev.blackoutburst.editor.window.Window
@@ -20,11 +21,16 @@ fun update() {
 
     while (Window.isOpen) {
         Grid.update()
+        Axis.update()
+
         Camera.update()
 
         Window.clear()
 
+
         Grid.render()
+        Axis.render()
+
         text.render()
 
         Window.update()
