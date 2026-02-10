@@ -1,10 +1,9 @@
 package dev.blackoutburst.editor
 
-import dev.blackoutburst.editor.camera.Camera
 import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
-import dev.blackoutburst.editor.graphics.Text
-import dev.blackoutburst.editor.window.Window
+import dev.blackoutburst.bogel.graphics.Text
+import dev.blackoutburst.bogel.window.Window
 import org.lwjgl.opengl.GL11.*
 
 fun main() {
@@ -23,10 +22,7 @@ fun update() {
         Grid.update()
         Axis.update()
 
-        Camera.update()
-
         Window.clear()
-
 
         Grid.render()
         Axis.render()

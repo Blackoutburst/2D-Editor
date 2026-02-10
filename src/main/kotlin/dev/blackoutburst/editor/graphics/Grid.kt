@@ -1,13 +1,13 @@
 package dev.blackoutburst.editor.graphics
 
-import dev.blackoutburst.editor.camera.Camera
-import dev.blackoutburst.editor.input.Keyboard
-import dev.blackoutburst.editor.maths.Matrix
-import dev.blackoutburst.editor.maths.Vector2f
-import dev.blackoutburst.editor.shader.Shader
-import dev.blackoutburst.editor.shader.ShaderProgram
-import dev.blackoutburst.editor.utils.stack
-import dev.blackoutburst.editor.window.Window
+import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.input.Keyboard
+import dev.blackoutburst.bogel.maths.Matrix
+import dev.blackoutburst.bogel.maths.Vector2f
+import dev.blackoutburst.bogel.shader.Shader
+import dev.blackoutburst.bogel.shader.ShaderProgram
+import dev.blackoutburst.bogel.utils.stack
+import dev.blackoutburst.bogel.window.Window
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.*
