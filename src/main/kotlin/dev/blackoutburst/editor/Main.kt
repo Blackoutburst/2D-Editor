@@ -4,6 +4,7 @@ import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.window.Window
+import dev.blackoutburst.editor.camera.CameraController
 import org.lwjgl.opengl.GL11.*
 
 fun main() {
@@ -21,6 +22,8 @@ fun update() {
     while (Window.isOpen) {
         Grid.update()
         Axis.update()
+
+        CameraController.update()
 
         Window.clear()
 
