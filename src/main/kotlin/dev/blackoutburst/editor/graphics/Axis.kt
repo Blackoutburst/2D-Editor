@@ -70,15 +70,15 @@ object Axis {
 
 
         // X
-        vertexArray.addAll(listOf(-Float.MAX_VALUE, 0f, 0f, 1f, 0f, 0f, 0.5f))
+        vertexArray.addAll(listOf(-1000000f, 0f, 0f, 1f, 0f, 0f, 0.5f))
         indexArray.add(vertexArray.size / 7 - 1)
-        vertexArray.addAll(listOf(Float.MAX_VALUE, 0f, 0f, 1f, 0f, 0f, 0.5f))
+        vertexArray.addAll(listOf(1000000f, 0f, 0f, 1f, 0f, 0f, 0.5f))
         indexArray.add(vertexArray.size / 7 - 1)
 
         // Y
-        vertexArray.addAll(listOf(0f, -Float.MAX_VALUE, 0f, 0f, 1f, 0f, 0.5f))
+        vertexArray.addAll(listOf(0f, -1000000f, 0f, 0f, 1f, 0f, 0.5f))
         indexArray.add(vertexArray.size / 7 - 1)
-        vertexArray.addAll(listOf(0f, Float.MAX_VALUE, 0f, 0f, 1f, 0f, 0.5f))
+        vertexArray.addAll(listOf(0f, 1000000f, 0f, 0f, 1f, 0f, 0.5f))
         indexArray.add(vertexArray.size / 7 - 1)
 
         vertices = vertexArray.toFloatArray()

@@ -76,13 +76,13 @@ object Grid {
         val width = ceil(Window.width.toFloat() / SIZE) * SIZE + (SIZE * 10)
         val height = ceil(Window.height.toFloat() / SIZE) * SIZE + (SIZE * 10)
 
-        for (x in 0 .. 20) {
+        for (x in 0 .. 50) {
             vertexArray.addAll(listOf(SIZE * x.toFloat(), 0f, 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
             vertexArray.addAll(listOf(SIZE * x.toFloat(), height, 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
         }
-        for (y in 0 .. 20) {
+        for (y in 0 .. 50) {
             vertexArray.addAll(listOf(0f, SIZE * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
             vertexArray.addAll(listOf(width, SIZE * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
