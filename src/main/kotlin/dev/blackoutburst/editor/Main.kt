@@ -16,7 +16,7 @@ import java.util.Random
 import kotlin.math.floor
 
 fun main() {
-    Window
+    Window.setTitle("2D Editor")
     update()
 }
 
