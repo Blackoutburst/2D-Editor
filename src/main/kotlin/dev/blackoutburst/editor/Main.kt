@@ -39,18 +39,7 @@ fun update() {
     TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.GRAY))
 
 
-    var renderPasses = 0
-    var lastTime = glfwGetTime()
-    var fps = 0
-
     while (Window.isOpen) {
-        renderPasses++
-        if (Time.runtime - lastTime >= 1) {
-            fps = renderPasses
-            renderPasses = 0
-            lastTime = Time.runtime
-        }
-
         TilesManager.update()
 
         Grid.update()
@@ -65,7 +54,6 @@ fun update() {
                 Tile(0, Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
             )
         }
-
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
             val mp = Mouse.getScreenPositionAlign(100)
 
@@ -74,7 +62,6 @@ fun update() {
             }
         }
 
-        text.text = "$fps fps"
         text.y = Window.height - text.height
 
         Window.clear()
