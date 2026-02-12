@@ -74,9 +74,8 @@ fun update() {
             }
         }
 
-        text.text = "$fps"
-
-
+        text.text = "$fps fps"
+        text.y = Window.height - text.height
 
         Window.clear()
 
