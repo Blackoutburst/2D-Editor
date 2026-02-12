@@ -23,7 +23,7 @@ object TilesManager {
     private val vaoId = glGenVertexArrays()
     private val vboId = glGenBuffers()
 
-    private var vertices: FloatArray? = null
+    private var vertices = floatArrayOf()
 
     private fun generate() {
         val vertexArray = mutableListOf<Float>()
@@ -95,8 +95,6 @@ object TilesManager {
         shaderProgram.setUniformMat4("model", model)
         shaderProgram.setUniformMat4("projection", Camera.projection2D)
 
-        vertices?.let {
-            glDrawArrays(GL_TRIANGLES, 0, it.size / 7)
-        }
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size / 7)
     }
 }

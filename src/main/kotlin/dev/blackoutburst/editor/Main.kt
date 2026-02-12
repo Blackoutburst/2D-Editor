@@ -6,30 +6,51 @@ import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
+import dev.blackoutburst.bogel.utils.Time
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.camera.CameraController
 import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
+import org.lwjgl.glfw.GLFW.glfwGetTime
 import org.lwjgl.opengl.GL11.*
 import java.util.Random
 
 fun main() {
-    Window.setTitle("2D Editor")
-    update()
+    Window.setTitle("2D Editor").setVsync(false)
+
+    while (Window.isOpen) {
+        update()
+    }
+
 }
 
 fun update() {
+
     val rng = Random()
+
 
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
     val text = Text(0f, 0f, 32f, "Hello World")
 
+
     TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.GRAY))
 
+
+    var renderPasses = 0
+    var lastTime = glfwGetTime()
+    var fps = 0
+
     while (Window.isOpen) {
+        renderPasses++
+        if (Time.runtime - lastTime >= 1) {
+            fps = renderPasses
+            renderPasses = 0
+            lastTime = Time.runtime
+        }
+
         TilesManager.update()
 
         Grid.update()
@@ -53,6 +74,10 @@ fun update() {
             }
         }
 
+        text.text = "$fps"
+
+
+
         Window.clear()
 
         TilesManager.render()
@@ -64,5 +89,7 @@ fun update() {
 
         Window.update()
     }
+
+    text.destroy()
     Window.destroy()
 }

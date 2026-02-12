@@ -4,11 +4,12 @@ import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
+import dev.blackoutburst.bogel.utils.Time
 import org.lwjgl.glfw.GLFW
 
 object CameraController {
 
-    private const val SPEED = 2
+    private const val SPEED = 1
 
     private val previousMousePosition = Vector2f()
 
@@ -19,16 +20,17 @@ object CameraController {
     fun update() {
         var dx = 0f
         var dy = 0f
+        val delta = Time.delta.toFloat()
 
         if (Mouse.isButtonDown(Mouse.MIDDLE_BUTTON)) {
             dx = Mouse.position.x - previousMousePosition.x
             dy = Mouse.position.y - previousMousePosition.y
         }
 
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_UP)) dy = 1f * SPEED
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_DOWN)) dy = -1f * SPEED
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT)) dx = 1f * SPEED
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_RIGHT)) dx = -1f * SPEED
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_UP)) dy = 1f * SPEED * delta
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_DOWN)) dy = -1f * SPEED * delta
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT)) dx = 1f * SPEED * delta
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_RIGHT)) dx = -1f * SPEED * delta
 
         Camera.position.x += dx
         Camera.position.y -= dy
