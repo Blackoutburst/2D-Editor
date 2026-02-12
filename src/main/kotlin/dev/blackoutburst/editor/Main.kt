@@ -1,6 +1,5 @@
 package dev.blackoutburst.editor
 
-import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.bogel.graphics.Text
@@ -14,7 +13,6 @@ import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.opengl.GL11.*
 import java.util.Random
-import kotlin.math.floor
 
 fun main() {
     Window.setTitle("2D Editor")
