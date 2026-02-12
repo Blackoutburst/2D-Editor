@@ -9,6 +9,7 @@ import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.camera.CameraController
+import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.opengl.GL11.*
@@ -39,19 +40,17 @@ fun update() {
         CameraController.update()
 
         if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
-            val x = floor((-Camera.position.x + Mouse.position.x) / 100) * 100
-            val y = floor((-Camera.position.y + (Window.height - Mouse.position.y)) / 100) * 100
+            val mp = Mouse.getScreenPositionAlign(100)
 
             TilesManager.addTile(
-                Tile(0, Vector2f(x, y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
+                Tile(0, Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
             )
         }
 
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
-            val x = floor((-Camera.position.x + Mouse.position.x) / 100) * 100
-            val y = floor((-Camera.position.y + (Window.height - Mouse.position.y)) / 100) * 100
+            val mp = Mouse.getScreenPositionAlign(100)
 
-            TilesManager.getTile(Vector2f(x, y))?.let {
+            TilesManager.getTile(Vector2f(mp.x, mp.y))?.let {
                 TilesManager.removeTile(it)
             }
         }
