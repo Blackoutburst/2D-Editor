@@ -1,7 +1,5 @@
 package dev.blackoutburst.editor
 
-import dev.blackoutburst.editor.graphics.Axis
-import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
@@ -9,12 +7,14 @@ import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.utils.Time
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.camera.CameraController
+import dev.blackoutburst.editor.graphics.Axis
+import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.glfw.GLFW.glfwGetTime
 import org.lwjgl.opengl.GL11.*
-import java.util.Random
+import java.util.*
 
 fun main() {
     Window.setTitle("2D Editor").setVsync(false)

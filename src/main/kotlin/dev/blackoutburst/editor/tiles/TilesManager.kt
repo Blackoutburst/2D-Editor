@@ -6,7 +6,6 @@ import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.shader.Shader
 import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
-import dev.blackoutburst.editor.graphics.Axis
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindVertexArray
 import org.lwjgl.opengl.GL30.glGenVertexArrays
@@ -45,7 +44,7 @@ object TilesManager {
 
             // VBO
             glBindBuffer(GL_ARRAY_BUFFER, vboId)
-            val vertexBuffer = stack.mallocFloat(vertices?.size ?: 0)
+            val vertexBuffer = stack.mallocFloat(vertices.size ?: 0)
             vertexBuffer.put(vertices).flip()
             glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW)
 

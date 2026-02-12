@@ -10,7 +10,8 @@ import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.*
+import org.lwjgl.opengl.GL30.glBindVertexArray
+import org.lwjgl.opengl.GL30.glGenVertexArrays
 import kotlin.math.ceil
 
 object Grid {
