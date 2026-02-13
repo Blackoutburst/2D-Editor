@@ -12,10 +12,13 @@ import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.opengl.GL11.*
+import java.io.File
 import java.util.*
 
 fun main() {
     Window.setTitle("2D Editor").setVsync(false)
+
+    File("./EditorFiles/tileTextures").mkdirs()
 
     while (Window.isOpen) {
         update()
