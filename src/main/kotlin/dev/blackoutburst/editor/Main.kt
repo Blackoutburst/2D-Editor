@@ -1,10 +1,12 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.bogel.graphics.Text
+import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.window.Window
+import dev.blackoutburst.editor.Main.Companion.textureFolder
 import dev.blackoutburst.editor.camera.CameraController
 import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
@@ -12,13 +14,20 @@ import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File
 import java.util.*
+
+class Main {
+    companion object {
+        val textureFolder = File("./EditorFiles/tileTextures")
+    }
+}
 
 fun main() {
     Window.setTitle("2D Editor").setVsync(false)
 
-    File("./EditorFiles/tileTextures").mkdirs()
+    textureFolder.mkdirs()
 
     while (Window.isOpen) {
         update()
@@ -33,11 +42,13 @@ fun update() {
 
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    glEnable(GL_TEXTURE_2D)
+    glEnable(GL_TEXTURE_2D_ARRAY)
 
     val text = Text(0f, 0f, 32f, "Hello World")
 
-
     TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.GRAY))
+    TilesManager.refreshDiffuseMap()
 
 
     while (Window.isOpen) {
@@ -52,7 +63,7 @@ fun update() {
             val mp = Mouse.getScreenPositionAlign(100)
 
             TilesManager.addTile(
-                Tile(0, Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
+                Tile(rng.nextInt(5), Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
             )
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {

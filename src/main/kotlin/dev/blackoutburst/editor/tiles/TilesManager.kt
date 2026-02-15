@@ -1,14 +1,18 @@
 package dev.blackoutburst.editor.tiles
 
 import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.maths.Matrix
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.shader.Shader
 import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
+import dev.blackoutburst.editor.Main
 import org.lwjgl.opengl.GL20.*
+import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import org.lwjgl.opengl.GL30.glBindVertexArray
 import org.lwjgl.opengl.GL30.glGenVertexArrays
+import java.io.File
 
 object TilesManager {
     private val tiles = mutableListOf<Tile>()
@@ -17,6 +21,8 @@ object TilesManager {
     private val fragmentShader = Shader(GL_FRAGMENT_SHADER, "/shaders/tiles.frag")
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
+    private var diffuseMap: TextureArray? = null
+
     private val model = Matrix()
 
     private val vaoId = glGenVertexArrays()
@@ -24,17 +30,23 @@ object TilesManager {
 
     private var vertices = floatArrayOf()
 
+    fun refreshDiffuseMap() {
+        diffuseMap?.let { glDeleteTextures(it.id) }
+
+        diffuseMap = TextureArray(Main.textureFolder.listFiles().toList().map { it.canonicalPath }, fromJar = false)
+    }
+
     private fun generate() {
         val vertexArray = mutableListOf<Float>()
 
         for (t in tiles) {
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y, 1.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
 
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y + t.size.y, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y + t.size.y, 0.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
         }
 
         vertices = vertexArray.toFloatArray()
@@ -44,22 +56,26 @@ object TilesManager {
 
             // VBO
             glBindBuffer(GL_ARRAY_BUFFER, vboId)
-            val vertexBuffer = stack.mallocFloat(vertices.size ?: 0)
+            val vertexBuffer = stack.mallocFloat(vertices.size)
             vertexBuffer.put(vertices).flip()
             glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW)
 
             // ATTRIB
             // TEXTURE ID
             glEnableVertexAttribArray(0)
-            glVertexAttribPointer(0, 1, GL_FLOAT, false, 28, 0)
+            glVertexAttribPointer(0, 1, GL_FLOAT, false, 36, 0)
 
             // POSITION
             glEnableVertexAttribArray(1)
-            glVertexAttribPointer(1, 2, GL_FLOAT, false, 28, 4)
+            glVertexAttribPointer(1, 2, GL_FLOAT, false, 36, 4)
+
+            // UV
+            glEnableVertexAttribArray(2)
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 36, 12)
 
             // COLOR
-            glEnableVertexAttribArray(2)
-            glVertexAttribPointer(2, 4, GL_FLOAT, false, 28, 12)
+            glEnableVertexAttribArray(3)
+            glVertexAttribPointer(3, 4, GL_FLOAT, false, 36, 20)
         }
     }
 
@@ -90,10 +106,16 @@ object TilesManager {
     fun render() {
         glBindVertexArray(vaoId)
         glUseProgram(shaderProgram.id)
+
+        diffuseMap?.let {
+            glActiveTexture(GL_TEXTURE0)
+            glBindTexture(GL_TEXTURE_2D_ARRAY, it.id)
+            shaderProgram.setUniform1i("diffuseMap", 0)
+        }
         shaderProgram.setUniformMat4("view", Camera.view)
         shaderProgram.setUniformMat4("model", model)
         shaderProgram.setUniformMat4("projection", Camera.projection2D)
 
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size / 7)
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size / 9)
     }
 }
