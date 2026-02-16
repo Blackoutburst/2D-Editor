@@ -1,7 +1,6 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.bogel.graphics.Text
-import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
@@ -47,7 +46,7 @@ fun update() {
 
     val text = Text(0f, 0f, 32f, "Hello World")
 
-    TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.GRAY))
+    TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.WHITE))
     TilesManager.refreshDiffuseMap()
 
 
@@ -63,7 +62,7 @@ fun update() {
             val mp = Mouse.getScreenPositionAlign(100)
 
             TilesManager.addTile(
-                Tile(rng.nextInt(5), Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
+                Tile(rng.nextInt(6), Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
             )
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
