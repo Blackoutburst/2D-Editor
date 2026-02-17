@@ -86,7 +86,7 @@ object Axis {
     }
 
     fun update() {
-        if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_Q))
+        if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_A))
             visible = !visible
     }
 

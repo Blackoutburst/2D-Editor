@@ -1,5 +1,6 @@
 package dev.blackoutburst.editor
 
+import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
@@ -26,6 +27,9 @@ fun main() {
     Window.setTitle("2D Editor").setVsync(false)
 
     textureFolder.mkdirs()
+
+    Camera.position.x = Window.width / 2f
+    Camera.position.y = Window.height / 2f
 
     while (Window.isOpen) {
         update()

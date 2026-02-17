@@ -24,10 +24,10 @@ object TilePanel {
     var selected = 0
 
     private data class TileElement(
-        var x: Float,
-        var y: Float,
+        var x: Float = 0f,
+        var y: Float = 0f,
         val textureId: Int,
-        var alpha: Float,
+        var alpha: Float = 0.5f,
     )
 
     private var visible = true
@@ -87,24 +87,9 @@ object TilePanel {
     }
 
     fun refreshPanel() {
-        var x = MARGIN
-        var y = Window.height - TILE_SIZE - MARGIN
-
         tiles = Main.textureFolder.listFiles().toList().map { it.canonicalPath }.mapIndexed { index, path ->
-            if (index > 0) {
-                if (index % 4 == 0) {
-                    y -= TILE_SIZE + MARGIN
-                    x = MARGIN
-                } else {
-                    x += (TILE_SIZE + MARGIN)
-                }
-            }
-
             TileElement(
-                x,
-                y,
-                Texture(path, fromJar = false).id,
-                0.5f,
+                textureId = Texture(path, fromJar = false).id
             )
         }
     }
@@ -120,13 +105,27 @@ object TilePanel {
         background.y = -Camera.position.y
 
         val mp = Mouse.getScreenPosition()
+        var tx = MARGIN
+        var ty = Window.height - TILE_SIZE - MARGIN
         tiles.forEachIndexed { index, tile ->
-            if (selected == index) {
-                selectBox.x = tile.x - 2.5f
-                selectBox.y = tile.y - 2.5f
+            if (index > 0) {
+                if (index % 4 == 0) {
+                    ty -= TILE_SIZE + MARGIN
+                    tx = MARGIN
+                } else {
+                    tx += (TILE_SIZE + MARGIN)
+                }
             }
 
-            if (mp.x >= tile.x && mp.x <= tile.x + TILE_SIZE && mp.y >= tile.y && mp.y <= tile.y + TILE_SIZE) {
+            tile.x = tx
+            tile.y = ty
+
+            if (selected == index) {
+                selectBox.x = tile.x - 2.5f - Camera.position.x
+                selectBox.y = tile.y - 2.5f - Camera.position.y
+            }
+
+            if (mp.x >= tile.x - Camera.position.x && mp.x <= tile.x + TILE_SIZE - Camera.position.x && mp.y >= tile.y - Camera.position.y && mp.y <= tile.y + TILE_SIZE - Camera.position.y) {
                 if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON))
                     selected = index
 
@@ -136,7 +135,7 @@ object TilePanel {
             }
         }
 
-        if (mp.x <= 250) { Mouse.update() }
+        if (mp.x <= 250 - Camera.position.x) { Mouse.update() }
     }
 
     fun render() {
