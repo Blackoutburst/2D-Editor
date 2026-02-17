@@ -58,7 +58,7 @@ object TilePanel {
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
     private val background = ColoredBox2D(0f, 0f, 250f, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.WHITE)
+    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.WHITE, 0.1f)
 
     init {
         vaoID = glGenVertexArrays()
@@ -154,6 +154,7 @@ object TilePanel {
             shaderProgram.setUniformMat4("projection", Camera.projection2D)
             shaderProgram.setUniformMat4("view", Camera.view)
             shaderProgram.setUniform1f("alpha", it.alpha)
+            shaderProgram.setUniform1f("borderRadius", 0.1f)
 
             glActiveTexture(GL_TEXTURE0)
             glBindVertexArray(vaoID)
