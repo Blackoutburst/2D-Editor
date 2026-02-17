@@ -59,6 +59,10 @@ fun update() {
         if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
             val mp = Mouse.getScreenPositionAlign(100)
 
+            TilesManager.getTile(Vector2f(mp.x, mp.y))?.let {
+                TilesManager.removeTile(it)
+            }
+
             TilesManager.addTile(
                 Tile(TilePanel.selected, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
             )
