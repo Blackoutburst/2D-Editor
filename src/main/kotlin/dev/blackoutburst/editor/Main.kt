@@ -1,6 +1,5 @@
 package dev.blackoutburst.editor
 
-import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
@@ -12,6 +11,7 @@ import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
+import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File
@@ -44,17 +44,15 @@ fun update() {
     glEnable(GL_TEXTURE_2D)
     glEnable(GL_TEXTURE_2D_ARRAY)
 
-    val text = Text(0f, 0f, 32f, "Hello World")
-
-    TilesManager.addTile(Tile(0, Vector2f(), Vector2f(100f), Color.WHITE))
     TilesManager.refreshDiffuseMap()
-
+    TilePanel.refreshPanel()
 
     while (Window.isOpen) {
         TilesManager.update()
 
         Grid.update()
         Axis.update()
+        TilePanel.update()
 
         CameraController.update()
 
@@ -73,8 +71,6 @@ fun update() {
             }
         }
 
-        text.y = Window.height - text.height
-
         Window.clear()
 
         TilesManager.render()
@@ -82,11 +78,10 @@ fun update() {
         Grid.render()
         Axis.render()
 
-        text.render()
+        TilePanel.render()
 
         Window.update()
     }
 
-    text.destroy()
     Window.destroy()
 }
