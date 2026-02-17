@@ -60,7 +60,7 @@ fun update() {
             val mp = Mouse.getScreenPositionAlign(100)
 
             TilesManager.addTile(
-                Tile(rng.nextInt(6), Vector2f(mp.x, mp.y), Vector2f(100f), Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat()))
+                Tile(TilePanel.selected, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
             )
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {

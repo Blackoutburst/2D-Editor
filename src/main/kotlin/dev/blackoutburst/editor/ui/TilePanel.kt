@@ -57,7 +57,7 @@ object TilePanel {
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
     private val background = ColoredBox2D(0f, 0f, 250f, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, 60f, Window.height.toFloat(), Color.WHITE)
+    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.WHITE)
 
     init {
         vaoID = glGenVertexArrays()
@@ -121,8 +121,8 @@ object TilePanel {
         val mp = Mouse.getScreenPosition()
         tiles.forEachIndexed { index, tile ->
             if (selected == index) {
-                selectBox.x = tile.x - 5f
-                selectBox.y = tile.y + 5f
+                selectBox.x = tile.x - 2.5f
+                selectBox.y = tile.y - 2.5f
             }
 
             if (mp.x >= tile.x && mp.x <= tile.x + TILE_SIZE && mp.y >= tile.y && mp.y <= tile.y + TILE_SIZE) {
