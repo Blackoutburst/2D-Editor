@@ -9,9 +9,7 @@ import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.editor.Main
 import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
-import org.lwjgl.opengl.GL30.glBindVertexArray
-import org.lwjgl.opengl.GL30.glGenVertexArrays
+import org.lwjgl.opengl.GL30.*
 
 object TilesManager {
     private val tiles = mutableListOf<Tile>()

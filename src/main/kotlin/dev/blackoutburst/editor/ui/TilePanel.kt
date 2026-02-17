@@ -16,7 +16,8 @@ import dev.blackoutburst.editor.Main
 import dev.blackoutburst.editor.inputs.getScreenPosition
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.*
+import org.lwjgl.opengl.GL30.glBindVertexArray
+import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object TilePanel {
 

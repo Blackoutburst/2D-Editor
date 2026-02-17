@@ -15,7 +15,6 @@ import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File
-import java.util.*
 
 class Main {
     companion object {
@@ -35,9 +34,6 @@ fun main() {
 }
 
 fun update() {
-
-    val rng = Random()
-
 
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
