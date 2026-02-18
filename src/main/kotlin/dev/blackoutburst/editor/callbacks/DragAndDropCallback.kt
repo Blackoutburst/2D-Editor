@@ -20,6 +20,5 @@ class DragAndDropCallback : GLFWDropCallbackI {
                 TilesManager.refreshDiffuseMap()
             }
         }
-
     }
 }

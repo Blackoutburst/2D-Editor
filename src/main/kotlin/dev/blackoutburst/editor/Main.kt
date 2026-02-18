@@ -1,7 +1,6 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.bogel.camera.Camera
-import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f

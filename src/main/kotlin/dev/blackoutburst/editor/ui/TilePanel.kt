@@ -15,6 +15,7 @@ import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
 import dev.blackoutburst.editor.inputs.getScreenPosition
+import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindVertexArray
@@ -23,6 +24,8 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 object TilePanel {
 
     private const val PANEL_WIDTH = 250f
+    private const val TILE_SIZE = 50f
+    private const val MARGIN = 10f
 
     var selected: String? = Main.textureFolder.listFiles().first().name
 
@@ -37,9 +40,6 @@ object TilePanel {
     )
 
     private var visible = true
-
-    private const val TILE_SIZE = 50f
-    private const val MARGIN = 10f
 
     private val vertices = floatArrayOf(
         0f, 0f, 0f, 0f,
@@ -136,7 +136,10 @@ object TilePanel {
             refreshButton.backgroundColor = Color(0.2f)
             refreshButton.outlineColor = Color(0.3f)
         }
-        refreshButton.onClick { refreshPanel() }
+        refreshButton.onClick {
+            TilesManager.refreshDiffuseMap()
+            refreshPanel()
+        }
 
 
         val mp = Mouse.getScreenPosition()
