@@ -14,6 +14,7 @@ import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
 import dev.blackoutburst.editor.inputs.getScreenPosition
+import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindVertexArray
@@ -21,12 +22,15 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object TilePanel {
 
-    var selected = 0
+    var selected = Main.textureFolder.listFiles().first().name
+
+    private val textureMap = mutableMapOf<String, Int>()
 
     private data class TileElement(
         var x: Float = 0f,
         var y: Float = 0f,
         val textureId: Int,
+        val textureName: String,
         var alpha: Float = 0.5f,
     )
 
@@ -87,9 +91,18 @@ object TilePanel {
     }
 
     fun refreshPanel() {
-        tiles = Main.textureFolder.listFiles().toList().map { it.canonicalPath }.mapIndexed { index, path ->
+        tiles.forEach { glDeleteTextures(it.textureId) }
+
+        textureMap.clear()
+
+        Main.textureFolder.listFiles().toList().forEach {
+            textureMap[it.name] = 0
+        }
+
+        tiles = Main.textureFolder.listFiles().toList().map { file ->
             TileElement(
-                textureId = Texture(path, fromJar = false).id
+                textureId = Texture(file.canonicalPath, fromJar = false).id,
+                textureName = file.name,
             )
         }
     }
@@ -120,18 +133,18 @@ object TilePanel {
             tile.x = tx
             tile.y = ty
 
-            if (selected == index) {
+            if (selected == tile.textureName) {
                 selectBox.x = tile.x - 2.5f - Camera.position.x
                 selectBox.y = tile.y - 2.5f - Camera.position.y
             }
 
             if (mp.x >= tile.x - Camera.position.x && mp.x <= tile.x + TILE_SIZE - Camera.position.x && mp.y >= tile.y - Camera.position.y && mp.y <= tile.y + TILE_SIZE - Camera.position.y) {
                 if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON))
-                    selected = index
+                    selected = tile.textureName
 
                 tile.alpha = 1f
             } else {
-                tile.alpha = if (selected == index) 1.0f else 0.5f
+                tile.alpha = if (selected == tile.textureName) 1.0f else 0.5f
             }
         }
 

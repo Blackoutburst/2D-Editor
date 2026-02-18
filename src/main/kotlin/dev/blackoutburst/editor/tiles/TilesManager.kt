@@ -27,8 +27,16 @@ object TilesManager {
 
     private var vertices = floatArrayOf()
 
+    private val textureMap = mutableMapOf<String, Int>()
+
     fun refreshDiffuseMap() {
         diffuseMap?.let { glDeleteTextures(it.id) }
+
+        textureMap.clear()
+
+        Main.textureFolder.listFiles().toList().forEachIndexed { index, file ->
+            textureMap[file.name] = index
+        }
 
         diffuseMap = TextureArray(Main.textureFolder.listFiles().toList().map { it.canonicalPath }, fromJar = false)
     }
@@ -37,13 +45,13 @@ object TilesManager {
         val vertexArray = mutableListOf<Float>()
 
         for (t in tiles) {
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y, 1.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y, 1.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
 
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y + t.size.y, 0.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(t.texture.toFloat(), t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y + t.size.y, 0.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
         }
 
         vertices = vertexArray.toFloatArray()
