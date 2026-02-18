@@ -114,7 +114,7 @@ object TilePanel {
         if (!visible) return
 
         if (textureMap[selected] == null) {
-            selected = textureMap.keys.first()
+            selected = textureMap.keys.firstOrNull()
         }
 
         background.height = Window.height.toFloat()
