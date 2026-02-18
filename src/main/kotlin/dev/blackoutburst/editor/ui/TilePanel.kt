@@ -14,7 +14,6 @@ import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
 import dev.blackoutburst.editor.inputs.getScreenPosition
-import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindVertexArray
