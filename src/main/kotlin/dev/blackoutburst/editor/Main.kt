@@ -8,6 +8,7 @@ import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main.Companion.textureFolder
+import dev.blackoutburst.editor.callbacks.DragAndDropCallback
 import dev.blackoutburst.editor.camera.CameraController
 import dev.blackoutburst.editor.graphics.Axis
 import dev.blackoutburst.editor.graphics.Grid
@@ -16,6 +17,7 @@ import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFW.glfwSetDropCallback
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File
@@ -28,6 +30,7 @@ class Main {
 
 fun main() {
     Window.setTitle("2D Editor").setVsync(false)
+    glfwSetDropCallback(Window.id, DragAndDropCallback())
 
     textureFolder.mkdirs()
 
