@@ -62,7 +62,7 @@ object TilePanel {
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
     private val background = ColoredBox2D(0f, 0f, 250f, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.WHITE, 0.1f)
+    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.GRAY, 0.1f)
 
     init {
         vaoID = glGenVertexArrays()
