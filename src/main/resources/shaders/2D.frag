@@ -3,6 +3,7 @@
 uniform sampler2D diffuseMap;
 uniform float alpha;
 uniform float borderRadius;
+uniform vec2 size;
 
 in vec2 uv;
 out vec4 FragColor;
@@ -13,8 +14,8 @@ float sdRoundedBox(vec2 p, vec2 b, float r) {
 }
 
 void main() {
-    vec2 p = uv - vec2(0.5);
-    vec2 halfSize = vec2(0.5);
+    vec2 p = (uv - vec2(0.5)) * size;
+    vec2 halfSize = size * 0.5;
     float r = min(borderRadius, min(halfSize.x, halfSize.y));
     float dist = sdRoundedBox(p, halfSize, r);
 

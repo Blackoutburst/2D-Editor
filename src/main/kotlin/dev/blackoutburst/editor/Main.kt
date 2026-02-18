@@ -1,6 +1,7 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
@@ -57,7 +58,6 @@ fun update() {
         TilePanel.update()
 
         CameraController.update()
-
         if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
             val mp = Mouse.getScreenPositionAlign(100)
 
@@ -81,7 +81,6 @@ fun update() {
             TilesManager.refreshDiffuseMap()
             TilePanel.refreshPanel()
         }
-
         Window.clear()
 
         TilesManager.render()

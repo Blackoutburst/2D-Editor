@@ -9,6 +9,7 @@ import dev.blackoutburst.bogel.maths.Matrix
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.shader.Shader
 import dev.blackoutburst.bogel.shader.ShaderProgram
+import dev.blackoutburst.bogel.ui.Button
 import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
@@ -61,7 +62,8 @@ object TilePanel {
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
     private val background = ColoredBox2D(0f, 0f, 250f, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.GRAY, 0.1f)
+    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.GRAY, 8f)
+    private val refreshButton = Button(0f, 0f, 100f, 25f, "Refresh", 8f)
 
     init {
         vaoID = glGenVertexArrays()
@@ -120,9 +122,22 @@ object TilePanel {
         background.x = -Camera.position.x
         background.y = -Camera.position.y
 
+        refreshButton.x = -Camera.position.x + MARGIN
+        refreshButton.y = -Camera.position.y + Window.height - 25f - MARGIN
+
+        refreshButton.backgroundColor = Color(0.1f)
+        refreshButton.outlineColor = Color(0.2f)
+        refreshButton.onHover {
+            refreshButton.backgroundColor = Color(0.2f)
+            refreshButton.outlineColor = Color(0.3f)
+        }
+
+        refreshButton.onClick { refreshPanel() }
+
+
         val mp = Mouse.getScreenPosition()
         var tx = MARGIN
-        var ty = Window.height - TILE_SIZE - MARGIN
+        var ty = Window.height - TILE_SIZE - MARGIN - 50f
         tiles.forEachIndexed { index, tile ->
             if (index > 0) {
                 if (index % 4 == 0) {
@@ -159,6 +174,8 @@ object TilePanel {
 
         background.render()
 
+        refreshButton.render()
+
         selected?.let { selectBox.render() }
 
         tiles.forEach {
@@ -170,12 +187,14 @@ object TilePanel {
             shaderProgram.setUniformMat4("projection", Camera.projection2D)
             shaderProgram.setUniformMat4("view", Camera.view)
             shaderProgram.setUniform1f("alpha", it.alpha)
-            shaderProgram.setUniform1f("borderRadius", 0.1f)
+            shaderProgram.setUniform1f("borderRadius", 8f)
+            shaderProgram.setUniform2f("size", TILE_SIZE, TILE_SIZE)
 
             glActiveTexture(GL_TEXTURE0)
             glBindVertexArray(vaoID)
             glBindTexture(GL_TEXTURE_2D, it.textureId)
             glDrawElements(GL_TRIANGLES, indices.size, GL_UNSIGNED_INT, 0)
         }
+
     }
 }
