@@ -66,7 +66,7 @@ fun update() {
             }
 
             TilesManager.addTile(
-                Tile(TilePanel.selected!!, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
+                Tile(TilePanel.selected ?: "", Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
             )
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
