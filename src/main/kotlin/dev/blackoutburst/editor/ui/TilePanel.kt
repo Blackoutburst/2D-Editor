@@ -22,6 +22,8 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object TilePanel {
 
+    private const val PANEL_WIDTH = 250f
+
     var selected: String? = Main.textureFolder.listFiles().first().name
 
     private val textureMap = mutableMapOf<String, Int>()
@@ -61,7 +63,7 @@ object TilePanel {
     private val fragmentShader = Shader(GL_FRAGMENT_SHADER, "/shaders/2D.frag")
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
-    private val background = ColoredBox2D(0f, 0f, 250f, Window.height.toFloat(), Color.DARK_GRAY)
+    private val background = ColoredBox2D(0f, 0f, PANEL_WIDTH, Window.height.toFloat(), Color.DARK_GRAY)
     private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.GRAY, 8f)
     private val refreshButton = Button(0f, 0f, 100f, 25f, "Refresh", 8f)
 
@@ -168,7 +170,7 @@ object TilePanel {
             }
         }
 
-        if (mp.x <= 250 - Camera.position.x) { Mouse.update() }
+        if (mp.x <= PANEL_WIDTH - Camera.position.x) { Mouse.update() }
     }
 
     fun render() {
