@@ -1,6 +1,7 @@
 package dev.blackoutburst.editor.tiles
 
 import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.graphics.Texture
 import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.maths.Matrix
 import dev.blackoutburst.bogel.maths.Vector2f
@@ -12,6 +13,8 @@ import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.*
 
 object TilesManager {
+    private val missingTexture = Texture("textures/error.png")
+
     private val tiles = mutableListOf<Tile>()
 
     private val vertexShader = Shader(GL_VERTEX_SHADER, "/shaders/tiles.vert")
@@ -34,24 +37,26 @@ object TilesManager {
 
         textureMap.clear()
 
-        Main.textureFolder.listFiles().toList().forEachIndexed { index, file ->
+        Main.textureFolder.listFiles().toList().filter { !it.isHidden }.forEachIndexed { index, file ->
             textureMap[file.name] = index
         }
 
-        diffuseMap = TextureArray(Main.textureFolder.listFiles().toList().map { it.canonicalPath }, fromJar = false)
+        diffuseMap = TextureArray(Main.textureFolder.listFiles().toList().filter { !it.isHidden }.map { it.canonicalPath }, fromJar = false)
+
+        generate()
     }
 
     private fun generate() {
         val vertexArray = mutableListOf<Float>()
 
         for (t in tiles) {
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y, 1.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x + t.size.x, t.position.y, 1.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
 
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y + t.size.y, 0.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
-            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: 0f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x + t.size.x, t.position.y + t.size.y, 1.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x, t.position.y + t.size.y, 0.0f, 1.0f, t.color.r, t.color.g, t.color.b, t.color.a))
+            vertexArray.addAll(listOf(textureMap[t.texture]?.toFloat() ?: -1f, t.position.x, t.position.y, 0.0f, 0.0f, t.color.r, t.color.g, t.color.b, t.color.a))
         }
 
         vertices = vertexArray.toFloatArray()
@@ -116,7 +121,13 @@ object TilesManager {
             glActiveTexture(GL_TEXTURE0)
             glBindTexture(GL_TEXTURE_2D_ARRAY, it.id)
             shaderProgram.setUniform1i("diffuseMap", 0)
+
         }
+
+        glActiveTexture(GL_TEXTURE1)
+        glBindTexture(GL_TEXTURE_2D, missingTexture.id)
+        shaderProgram.setUniform1i("missingDiffuseMap", 1)
+
         shaderProgram.setUniformMat4("view", Camera.view)
         shaderProgram.setUniformMat4("model", model)
         shaderProgram.setUniformMat4("projection", Camera.projection2D)

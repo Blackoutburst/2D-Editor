@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object TilePanel {
 
-    var selected = Main.textureFolder.listFiles().first().name
+    var selected: String? = Main.textureFolder.listFiles().first().name
 
     private val textureMap = mutableMapOf<String, Int>()
 
@@ -95,11 +95,11 @@ object TilePanel {
 
         textureMap.clear()
 
-        Main.textureFolder.listFiles().toList().forEach {
+        Main.textureFolder.listFiles().toList().filter { !it.isHidden }.forEach {
             textureMap[it.name] = 0
         }
 
-        tiles = Main.textureFolder.listFiles().toList().map { file ->
+        tiles = Main.textureFolder.listFiles().toList().filter { !it.isHidden }.map { file ->
             TileElement(
                 textureId = Texture(file.canonicalPath, fromJar = false).id,
                 textureName = file.name,
@@ -112,6 +112,10 @@ object TilePanel {
             visible = !visible
 
         if (!visible) return
+
+        if (textureMap[selected] == null) {
+            selected = textureMap.keys.first()
+        }
 
         background.height = Window.height.toFloat()
         background.x = -Camera.position.x
@@ -155,7 +159,8 @@ object TilePanel {
         if (!visible) return
 
         background.render()
-        selectBox.render()
+
+        selected?.let { selectBox.render() }
 
         tiles.forEach {
 

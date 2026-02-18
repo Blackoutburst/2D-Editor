@@ -1,6 +1,7 @@
 package dev.blackoutburst.editor
 
 import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.input.Mouse
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.utils.Color
@@ -13,6 +14,7 @@ import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
 import dev.blackoutburst.editor.ui.TilePanel
+import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File
@@ -64,7 +66,7 @@ fun update() {
             }
 
             TilesManager.addTile(
-                Tile(TilePanel.selected, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
+                Tile(TilePanel.selected!!, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
             )
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
@@ -73,6 +75,11 @@ fun update() {
             TilesManager.getTile(Vector2f(mp.x, mp.y))?.let {
                 TilesManager.removeTile(it)
             }
+        }
+
+        if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_R)) {
+            TilesManager.refreshDiffuseMap()
+            TilePanel.refreshPanel()
         }
 
         Window.clear()
