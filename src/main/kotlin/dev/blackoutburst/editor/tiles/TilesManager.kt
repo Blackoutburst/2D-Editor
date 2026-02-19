@@ -3,6 +3,7 @@ package dev.blackoutburst.editor.tiles
 import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.bogel.graphics.ColoredBox2D
 import dev.blackoutburst.bogel.graphics.Framebuffer
+import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.graphics.Texture
 import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.maths.Matrix
@@ -22,11 +23,11 @@ import org.lwjgl.system.Platform
 object TilesManager {
     private val missingTexture = Texture("textures/error.png")
 
-    val layers = mutableListOf(
+    var layers = mutableListOf(
         TileLayer(
             order = 0,
-            name = "default",
-            color = Color.RED,
+            name = Text(0f, 0f, 16f, "default"),
+            color = ColoredBox2D(0f, 0f, 0f, 0f, Color.RED, 8f),
             visible = true,
             tiles = mutableListOf(),
             framebuffer = Framebuffer(1600, 900),
@@ -37,7 +38,6 @@ object TilesManager {
             textureMap = mutableMapOf(),
             textureSize = 16,
             diffuseMap = null,
-            colorOutline = ColoredBox2D(0f, 0f, 0f, 0f, Color.RED, 8f)
         )
     )
 
@@ -62,6 +62,7 @@ object TilesManager {
             layer.diffuseMap =
                 TextureArray(
                     Main.textureFolder.listFiles().toList().filter { !it.isHidden }.map { it.canonicalPath },
+                    size = layer.textureSize,
                     fromJar = false
                 )
 

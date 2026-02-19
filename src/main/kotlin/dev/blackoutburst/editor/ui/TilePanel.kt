@@ -128,7 +128,6 @@ object TilePanel {
         refreshButton.x = -Camera.position.x + MARGIN
         refreshButton.y = -Camera.position.y + Window.height - 25f - MARGIN
 
-
         refreshButton.onExit {
             refreshButton.backgroundColor = Color(0.1f)
             refreshButton.outlineColor = Color(0.2f)
