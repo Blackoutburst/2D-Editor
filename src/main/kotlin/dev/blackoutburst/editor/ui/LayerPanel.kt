@@ -2,7 +2,6 @@ package dev.blackoutburst.editor.ui
 
 import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.bogel.graphics.ColoredBox2D
-import dev.blackoutburst.bogel.graphics.Framebuffer
 import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.input.Mouse
@@ -13,11 +12,9 @@ import dev.blackoutburst.editor.inputs.getScreenPosition
 import dev.blackoutburst.editor.tiles.TileLayer
 import dev.blackoutburst.editor.tiles.TilesManager
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL15.glGenBuffers
-import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object LayerPanel {
-    private const val PANEL_WIDTH = 200f
+    const val PANEL_WIDTH = 200f
     private const val OUTLINE_SIZE = 10f
     private const val LAYER_WIDTH = 170f
     private const val LAYER_HEIGHT = 90f
@@ -31,7 +28,7 @@ object LayerPanel {
 
     private val newLayerButton = Button(0f, 0f, 100f, 25f, "Add Layer", 8f)
     private val background = ColoredBox2D(Window.width - PANEL_WIDTH, 0f, PANEL_WIDTH, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, LAYER_WIDTH + OUTLINE_SIZE, LAYER_HEIGHT + OUTLINE_SIZE, Color.GRAY, 8f)
+    private val selectBox = ColoredBox2D(0f, 0f, LAYER_WIDTH + OUTLINE_SIZE, LAYER_HEIGHT + OUTLINE_SIZE, Color.GRAY, 10f)
 
     fun update() {
         if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_L))
@@ -54,25 +51,17 @@ object LayerPanel {
         }
         newLayerButton.onClick {
             val layerCount = TilesManager.layers.size
-            TilesManager.layers.add(TileLayer(
+            val newLayer = TileLayer(
                 order = layerCount,
                 name = Text(0f, 0f, 16f, "Layer (${layerCount})"),
-                color = ColoredBox2D(0f, 0f, 0f, 0f, Color.RED, 8f),
-                visible = true,
-                tiles = mutableListOf(),
-                framebuffer = Framebuffer(1600, 900),
-                gridSize = 100,
-                glVAO = glGenVertexArrays(),
-                glVBO = glGenBuffers(),
-                glVertices = floatArrayOf(),
-                textureMap = mutableMapOf(),
-                textureSize = 16,
-                diffuseMap = null,
-            ))
+            )
+
+            TilesManager.layers.add(newLayer)
 
             TilesManager.refreshDiffuseMap()
 
             TilesManager.layers = TilesManager.layers.sortedBy { it.order }.toMutableList()
+            selected = newLayer
         }
 
         background.height = Window.height.toFloat()
@@ -95,13 +84,30 @@ object LayerPanel {
             layer.name.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN
             layer.name.y = sy - Camera.position.y
 
+            layer.editButton.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN + LAYER_WIDTH - 50f - (MARGIN_BUTTON / 2)
+            layer.editButton.y = sy - Camera.position.y + LAYER_HEIGHT - 25f - (MARGIN_BUTTON / 2)
+
+            layer.editButton.onExit {
+                layer.editButton.backgroundColor = Color(0.1f)
+                layer.editButton.outlineColor = Color(0.2f)
+            }
+            layer.editButton.onHover {
+                layer.editButton.backgroundColor = Color(0.2f)
+                layer.editButton.outlineColor = Color(0.3f)
+            }
+            layer.editButton.onClick {
+                LayerEditPanel.layer = layer
+            }
+
             if (layer == selected) {
                 selectBox.y = sy - Camera.position.y - (OUTLINE_SIZE / 2)
             }
             sy -= LAYER_HEIGHT + MARGIN
         }
 
-        if (mp.x >= Window.width - PANEL_WIDTH - Camera.position.x) { Mouse.update() }
+        if (mp.x >= background.x) { Mouse.update() }
+
+        LayerEditPanel.update()
     }
 
     fun render() {
@@ -119,7 +125,10 @@ object LayerPanel {
             layer.framebuffer.render(Window.width - PANEL_WIDTH -Camera.position.x + MARGIN, y - Camera.position.y, LAYER_WIDTH, LAYER_HEIGHT, borderRadius = 8f)
             y -= LAYER_HEIGHT + MARGIN
 
+            layer.editButton.render()
             layer.name.render()
         }
+
+        LayerEditPanel.render()
     }
 }
