@@ -5,6 +5,7 @@ import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.utils.Color
 
 data class TileLayer(
+    var order: Int,
     var name: String,
     var color: Color,
     var visible: Boolean,

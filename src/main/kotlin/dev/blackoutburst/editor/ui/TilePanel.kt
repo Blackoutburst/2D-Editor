@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 
 object TilePanel {
 
-    private const val PANEL_WIDTH = 250f
+    private const val PANEL_WIDTH = 190f
     private const val TILE_SIZE = 50f
     private const val MARGIN = 10f
 
@@ -147,7 +147,7 @@ object TilePanel {
         var ty = Window.height - TILE_SIZE - MARGIN - 50f
         tiles.forEachIndexed { index, tile ->
             if (index > 0) {
-                if (index % 4 == 0) {
+                if (index % 3 == 0) {
                     ty -= TILE_SIZE + MARGIN
                     tx = MARGIN
                 } else {

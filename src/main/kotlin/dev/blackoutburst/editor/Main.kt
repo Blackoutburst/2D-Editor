@@ -14,6 +14,7 @@ import dev.blackoutburst.editor.graphics.Grid
 import dev.blackoutburst.editor.inputs.getScreenPositionAlign
 import dev.blackoutburst.editor.tiles.Tile
 import dev.blackoutburst.editor.tiles.TilesManager
+import dev.blackoutburst.editor.ui.LayerPanel
 import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFW.glfwSetDropCallback
@@ -58,25 +59,32 @@ fun update() {
         Grid.update()
         Axis.update()
         TilePanel.update()
+        LayerPanel.update()
 
         CameraController.update()
         if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
             val mp = Mouse.getScreenPositionAlign(100)
 
-            TilesManager.getTile("default", Vector2f(mp.x, mp.y))?.let {
-                TilesManager.removeTile("default", it)
+            LayerPanel.selected?.let { layer ->
+                TilesManager.getTile(layer, Vector2f(mp.x, mp.y))?.let {
+                TilesManager.removeTile(layer, it)
             }
 
-            TilesManager.addTile(
-                "default",
-                Tile(TilePanel.selected ?: "", Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
-            )
+                TilePanel.selected?.let { tile ->
+                    TilesManager.addTile(
+                        layer,
+                        Tile(tile, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
+                    )
+                }
+            }
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
             val mp = Mouse.getScreenPositionAlign(100)
 
-            TilesManager.getTile("default", Vector2f(mp.x, mp.y))?.let {
-                TilesManager.removeTile("default", it)
+            LayerPanel.selected?.let { layer ->
+                TilesManager.getTile(layer, Vector2f(mp.x, mp.y))?.let {
+                    TilesManager.removeTile(layer, it)
+                }
             }
         }
 
@@ -92,6 +100,7 @@ fun update() {
         Axis.render()
 
         TilePanel.render()
+        LayerPanel.render()
 
         Window.update()
     }

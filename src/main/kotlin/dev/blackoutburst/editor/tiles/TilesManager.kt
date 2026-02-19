@@ -17,8 +17,9 @@ import org.lwjgl.opengl.GL30.*
 object TilesManager {
     private val missingTexture = Texture("textures/error.png")
 
-    private val layers = mutableListOf(
+    val layers = mutableListOf(
         TileLayer(
+            order = 0,
             name = "default",
             color = Color.RED,
             visible = true,
@@ -104,32 +105,26 @@ object TilesManager {
         }
     }
 
-    fun addTile(layerName: String, tile: Tile) {
-        layers.find { it.name == layerName }?.let {
-            it.tiles.add(tile)
+    fun addTile(layer: TileLayer, tile: Tile) {
+        layer.tiles.add(tile)
 
-            generate(it)
-        }
+        generate(layer)
     }
 
-    fun getTile(layerName: String, position: Vector2f): Tile? {
-        layers.find { it.name == layerName }?.let {
-            for (t in it.tiles) {
-                if (t.position.x == position.x && t.position.y == position.y) {
-                    return t
-                }
+    fun getTile(layer: TileLayer, position: Vector2f): Tile? {
+        for (t in layer.tiles) {
+            if (t.position.x == position.x && t.position.y == position.y) {
+                return t
             }
         }
 
         return null
     }
 
-    fun removeTile(layerName: String, tile: Tile) {
-        getTile(layerName, tile.position)?.let { tile ->
-            layers.find { it.name == layerName }?.let { layer ->
-                layer.tiles.remove(tile)
-                generate(layer)
-            }
+    fun removeTile(layer: TileLayer, tile: Tile) {
+        getTile(layer, tile.position)?.let { tile ->
+            layer.tiles.remove(tile)
+            generate(layer)
         }
     }
 
@@ -144,7 +139,6 @@ object TilesManager {
                 glActiveTexture(GL_TEXTURE0)
                 glBindTexture(GL_TEXTURE_2D_ARRAY, it.id)
                 shaderProgram.setUniform1i("diffuseMap", 0)
-
             }
 
             glActiveTexture(GL_TEXTURE1)
@@ -161,7 +155,8 @@ object TilesManager {
 
             shaderProgram.setUniformMat4("view", Camera.view)
 
-            glDrawArrays(GL_TRIANGLES, 0, layer.glVertices.size / 9)
+            if (layer.visible)
+                glDrawArrays(GL_TRIANGLES, 0, layer.glVertices.size / 9)
         }
     }
 
