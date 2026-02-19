@@ -24,4 +24,5 @@ data class TileLayer(
     var textureSize: Int = 16,
     var diffuseMap: TextureArray? = null,
     val editButton: Button = Button(0f, 0f, 50f, 25f, "Edit", 8f),
+    val visibilityButton: Button = Button(0f, 0f, 15f, 15f, "", borderRadius = 100f, initialOutlineSize = 2f, initialOutlineColor = Color.DARK_GRAY, initialBackgroundColor = Color.GREEN),
 )

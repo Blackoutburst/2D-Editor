@@ -31,8 +31,10 @@ object LayerPanel {
     private val selectBox = ColoredBox2D(0f, 0f, LAYER_WIDTH + OUTLINE_SIZE, LAYER_HEIGHT + OUTLINE_SIZE, Color.GRAY, 10f)
 
     fun update() {
-        if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_L))
+        if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_L)) {
+            LayerEditPanel.layer = null
             visible = !visible
+        }
 
         if (!visible) return
 
@@ -99,6 +101,21 @@ object LayerPanel {
                 LayerEditPanel.layer = layer
             }
 
+
+            layer.visibilityButton.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN + (MARGIN_BUTTON / 2)
+            layer.visibilityButton.y = sy - Camera.position.y + LAYER_HEIGHT - 15f - (MARGIN_BUTTON / 2)
+
+            layer.visibilityButton.onExit {
+                layer.visibilityButton.outlineColor = Color.DARK_GRAY
+            }
+            layer.visibilityButton.onHover {
+                layer.visibilityButton.outlineColor = Color.GRAY
+            }
+            layer.visibilityButton.onClick {
+                layer.visible = !layer.visible
+                layer.visibilityButton.backgroundColor = if (layer.visible) Color.GREEN else Color.RED
+            }
+
             if (layer == selected) {
                 selectBox.y = sy - Camera.position.y - (OUTLINE_SIZE / 2)
             }
@@ -113,6 +130,8 @@ object LayerPanel {
     fun render() {
         if (!visible) return
 
+        LayerEditPanel.render()
+
         background.render()
         newLayerButton.render()
 
@@ -126,9 +145,8 @@ object LayerPanel {
             y -= LAYER_HEIGHT + MARGIN
 
             layer.editButton.render()
+            layer.visibilityButton.render()
             layer.name.render()
         }
-
-        LayerEditPanel.render()
     }
 }
