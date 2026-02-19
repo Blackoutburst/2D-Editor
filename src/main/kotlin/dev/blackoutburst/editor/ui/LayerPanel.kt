@@ -64,6 +64,7 @@ object LayerPanel {
 
             TilesManager.layers = TilesManager.layers.sortedBy { it.order }.toMutableList()
             selected = newLayer
+            LayerEditPanel.layer = newLayer
         }
 
         background.height = Window.height.toFloat()
@@ -73,6 +74,21 @@ object LayerPanel {
         selectBox.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN - (OUTLINE_SIZE / 2)
         var sy = Window.height - MARGIN - LAYER_HEIGHT - MARGIN_TOP
         for (layer in TilesManager.layers) {
+            layer.visibilityButton.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN + (MARGIN_BUTTON / 2)
+            layer.visibilityButton.y = sy - Camera.position.y + LAYER_HEIGHT - 15f - (MARGIN_BUTTON / 2)
+
+            layer.visibilityButton.onExit {
+                layer.visibilityButton.outlineColor = Color.DARK_GRAY
+            }
+            layer.visibilityButton.onHover {
+                layer.visibilityButton.outlineColor = Color.GRAY
+            }
+            layer.visibilityButton.onClick {
+                layer.visible = !layer.visible
+                layer.visibilityButton.backgroundColor = if (layer.visible) Color.GREEN else Color.RED
+                Mouse.update()
+            }
+
             if (mp.x >= layer.color.x && mp.x <= layer.color.x + LAYER_WIDTH && mp.y >= layer.color.y && mp.y <= layer.color.y + LAYER_HEIGHT) {
                 if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON))
                     selected = layer
@@ -102,29 +118,14 @@ object LayerPanel {
             }
 
 
-            layer.visibilityButton.x = Window.width - PANEL_WIDTH -Camera.position.x + MARGIN + (MARGIN_BUTTON / 2)
-            layer.visibilityButton.y = sy - Camera.position.y + LAYER_HEIGHT - 15f - (MARGIN_BUTTON / 2)
-
-            layer.visibilityButton.onExit {
-                layer.visibilityButton.outlineColor = Color.DARK_GRAY
-            }
-            layer.visibilityButton.onHover {
-                layer.visibilityButton.outlineColor = Color.GRAY
-            }
-            layer.visibilityButton.onClick {
-                layer.visible = !layer.visible
-                layer.visibilityButton.backgroundColor = if (layer.visible) Color.GREEN else Color.RED
-            }
-
             if (layer == selected) {
                 selectBox.y = sy - Camera.position.y - (OUTLINE_SIZE / 2)
             }
             sy -= LAYER_HEIGHT + MARGIN
         }
 
-        if (mp.x >= background.x) { Mouse.update() }
-
         LayerEditPanel.update()
+        if (mp.x >= background.x) { Mouse.update() }
     }
 
     fun render() {
