@@ -1,6 +1,7 @@
 package dev.blackoutburst.editor.tiles
 
 import dev.blackoutburst.bogel.camera.Camera
+import dev.blackoutburst.bogel.graphics.ColoredBox2D
 import dev.blackoutburst.bogel.graphics.Framebuffer
 import dev.blackoutburst.bogel.graphics.Texture
 import dev.blackoutburst.bogel.graphics.TextureArray
@@ -10,9 +11,13 @@ import dev.blackoutburst.bogel.shader.Shader
 import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.Color
 import dev.blackoutburst.bogel.utils.stack
+import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
+import dev.blackoutburst.editor.graphics.Axis
+import dev.blackoutburst.editor.graphics.Grid
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.*
+import org.lwjgl.system.Platform
 
 object TilesManager {
     private val missingTexture = Texture("textures/error.png")
@@ -24,14 +29,15 @@ object TilesManager {
             color = Color.RED,
             visible = true,
             tiles = mutableListOf(),
-            framebuffer = Framebuffer(512, 512),
+            framebuffer = Framebuffer(1600, 900),
             gridSize = 100,
             glVAO = glGenVertexArrays(),
             glVBO = glGenBuffers(),
             glVertices = floatArrayOf(),
             textureMap = mutableMapOf(),
             textureSize = 16,
-            diffuseMap = null
+            diffuseMap = null,
+            colorOutline = ColoredBox2D(0f, 0f, 0f, 0f, Color.RED, 8f)
         )
     )
 
@@ -41,6 +47,7 @@ object TilesManager {
 
     private val model = Matrix()
     private val originView = Matrix()
+    private val originProjection = Matrix()
 
     fun refreshDiffuseMap() {
         for (layer in layers) {
@@ -147,12 +154,19 @@ object TilesManager {
 
 
             shaderProgram.setUniformMat4("model", model)
-            shaderProgram.setUniformMat4("projection", Camera.projection2D)
 
+            shaderProgram.setUniformMat4("projection", originProjection.setIdentity().ortho2D(
+                -layer.framebuffer.width / 2f,
+                layer.framebuffer.width / 2f,
+                -layer.framebuffer.height / 2f,
+                layer.framebuffer.height / 2f,
+                -1f, 1f
+            ))
             shaderProgram.setUniformMat4("view", originView)
 
             generateLayerFramebuffer(layer)
 
+            shaderProgram.setUniformMat4("projection", Camera.projection2D)
             shaderProgram.setUniformMat4("view", Camera.view)
 
             if (layer.visible)
@@ -161,11 +175,15 @@ object TilesManager {
     }
 
     private fun generateLayerFramebuffer(layer: TileLayer) {
+        val scale = if (Platform.get() == Platform.MACOSX) 2 else 1
+
+        glViewport(0, 0, layer.framebuffer.width, layer.framebuffer.height)
         glBindFramebuffer(GL_FRAMEBUFFER, layer.framebuffer.fbo)
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
         glDrawArrays(GL_TRIANGLES, 0, layer.glVertices.size / 9)
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        glViewport(0, 0, Window.width * scale, Window.height * scale)
     }
 }

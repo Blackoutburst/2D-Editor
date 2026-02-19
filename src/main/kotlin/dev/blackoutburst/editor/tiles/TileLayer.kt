@@ -1,5 +1,6 @@
 package dev.blackoutburst.editor.tiles
 
+import dev.blackoutburst.bogel.graphics.ColoredBox2D
 import dev.blackoutburst.bogel.graphics.Framebuffer
 import dev.blackoutburst.bogel.graphics.TextureArray
 import dev.blackoutburst.bogel.utils.Color
@@ -17,5 +18,6 @@ data class TileLayer(
     var glVertices: FloatArray,
     val textureMap: MutableMap<String, Int>,
     var textureSize: Int,
-    var diffuseMap: TextureArray?
+    var diffuseMap: TextureArray?,
+    var colorOutline: ColoredBox2D
 )

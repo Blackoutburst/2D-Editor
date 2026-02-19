@@ -4,7 +4,6 @@ layout(location = 0) in vec2 aPos;
 layout(location = 1) in vec2 aUv;
 
 out vec2 uv;
-out vec2 fragPos;
 
 uniform mat4 projection;
 uniform mat4 model;

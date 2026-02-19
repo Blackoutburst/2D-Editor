@@ -25,6 +25,7 @@ object TilePanel {
 
     private const val PANEL_WIDTH = 190f
     private const val TILE_SIZE = 50f
+    private const val OUTLINE_SIZE = 5f
     private const val MARGIN = 10f
 
     var selected: String? = Main.textureFolder.listFiles().first().name
@@ -64,7 +65,7 @@ object TilePanel {
     private val shaderProgram = ShaderProgram(vertexShader, fragmentShader)
 
     private val background = ColoredBox2D(0f, 0f, PANEL_WIDTH, Window.height.toFloat(), Color.DARK_GRAY)
-    private val selectBox = ColoredBox2D(0f, 0f, 55f, 55f, Color.GRAY, 8f)
+    private val selectBox = ColoredBox2D(0f, 0f, TILE_SIZE + OUTLINE_SIZE, TILE_SIZE + OUTLINE_SIZE, Color.GRAY, 8f)
     private val refreshButton = Button(0f, 0f, 100f, 25f, "Refresh", 8f)
 
     init {
@@ -159,8 +160,8 @@ object TilePanel {
             tile.y = ty
 
             if (selected == tile.textureName) {
-                selectBox.x = tile.x - 2.5f - Camera.position.x
-                selectBox.y = tile.y - 2.5f - Camera.position.y
+                selectBox.x = tile.x - (OUTLINE_SIZE/2f) - Camera.position.x
+                selectBox.y = tile.y - (OUTLINE_SIZE/2f) - Camera.position.y
             }
 
             if (mp.x >= tile.x - Camera.position.x && mp.x <= tile.x + TILE_SIZE - Camera.position.x && mp.y >= tile.y - Camera.position.y && mp.y <= tile.y + TILE_SIZE - Camera.position.y) {
