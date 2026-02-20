@@ -1,6 +1,8 @@
 package dev.blackoutburst.editor.callbacks
 
 import dev.blackoutburst.editor.Main
+import dev.blackoutburst.editor.Main.Companion.queue
+import dev.blackoutburst.editor.files.FileManager
 import dev.blackoutburst.editor.tiles.TilesManager
 import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.glfw.GLFWDropCallback
@@ -18,6 +20,12 @@ class DragAndDropCallback : GLFWDropCallbackI {
 
                 TilePanel.refreshPanel()
                 TilesManager.refreshDiffuseMap()
+            }
+            if (path.endsWith(".2de", true)) {
+                queue.add {
+                    FileManager.load(path)
+                    TilesManager.refreshDiffuseMap()
+                }
             }
         }
     }

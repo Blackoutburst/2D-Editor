@@ -12,6 +12,7 @@ import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
+import org.lwjgl.glfw.GLFW.GLFW_KEY_K
 import org.lwjgl.glfw.GLFW.GLFW_KEY_O
 import org.lwjgl.glfw.GLFW.GLFW_KEY_W
 import org.lwjgl.opengl.GL20.*
@@ -125,9 +126,8 @@ object TilesManager {
     }
 
     fun update() {
-        if (Keyboard.isKeyPressed(GLFW_KEY_O)) {
+        if (Keyboard.isKeyPressed(GLFW_KEY_K)) {
             showLayer = if (showLayer == 0f) 1f else 0f
-            println(showLayer)
         }
     }
 
