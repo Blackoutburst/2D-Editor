@@ -31,6 +31,7 @@ object LayerPanel {
     private val selectBox = ColoredBox2D(0f, 0f, LAYER_WIDTH + OUTLINE_SIZE, LAYER_HEIGHT + OUTLINE_SIZE, Color.GRAY, 10f)
 
     fun update() {
+        LayerEditPanel.update()
         if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_L)) {
             LayerEditPanel.layer = null
             visible = !visible
@@ -124,7 +125,6 @@ object LayerPanel {
             sy -= LAYER_HEIGHT + MARGIN
         }
 
-        LayerEditPanel.update()
         if (mp.x >= background.x) { Mouse.update() }
     }
 

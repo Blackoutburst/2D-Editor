@@ -16,7 +16,7 @@ data class TileLayer(
     var visible: Boolean = true,
     val tiles: MutableList<Tile> = mutableListOf(),
     val framebuffer: Framebuffer = Framebuffer(1600, 900),
-    val gridSize: Int = 100,
+    var gridSize: Int = 100,
     var glVAO: Int = glGenVertexArrays(),
     var glVBO: Int = glGenBuffers(),
     var glVertices: FloatArray = floatArrayOf(),

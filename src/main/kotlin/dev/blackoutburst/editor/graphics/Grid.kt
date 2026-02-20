@@ -8,6 +8,7 @@ import dev.blackoutburst.bogel.shader.Shader
 import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
+import dev.blackoutburst.editor.Main
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindVertexArray
@@ -15,8 +16,6 @@ import org.lwjgl.opengl.GL30.glGenVertexArrays
 import kotlin.math.ceil
 
 object Grid {
-    private const val SIZE = 100f
-
     private val position = Vector2f()
 
     private val vertexShader = Shader(GL_VERTEX_SHADER, "/shaders/grid.vert")
@@ -38,7 +37,9 @@ object Grid {
 
     init {
         generate()
+    }
 
+    private fun updateVAO() {
         stack(256 * 1024) { stack ->
             glBindVertexArray(vaoId)
 
@@ -70,33 +71,35 @@ object Grid {
         indices = null
     }
 
-    private fun generate() {
+    fun generate() {
         val vertexArray = mutableListOf<Float>()
         val indexArray = mutableListOf<Int>()
 
-        val width = ceil(Window.width.toFloat() / SIZE) * SIZE + (SIZE * 10)
-        val height = ceil(Window.height.toFloat() / SIZE) * SIZE + (SIZE * 10)
+        val width = ceil(Window.width.toFloat() / Main.gridSize) * Main.gridSize + (Main.gridSize * 10)
+        val height = ceil(Window.height.toFloat() / Main.gridSize) * Main.gridSize + (Main.gridSize * 10)
 
-        for (x in 0 .. 50) {
-            vertexArray.addAll(listOf(SIZE * x.toFloat(), 0f, 0f, 0.2f, 0.2f, 0.2f, 1f))
+        for (x in 0 .. 500) {
+            vertexArray.addAll(listOf(Main.gridSize * x.toFloat(), 0f, 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
-            vertexArray.addAll(listOf(SIZE * x.toFloat(), height, 0f, 0.2f, 0.2f, 0.2f, 1f))
+            vertexArray.addAll(listOf(Main.gridSize * x.toFloat(), height, 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
         }
-        for (y in 0 .. 50) {
-            vertexArray.addAll(listOf(0f, SIZE * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
+        for (y in 0 .. 500) {
+            vertexArray.addAll(listOf(0f, Main.gridSize * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
-            vertexArray.addAll(listOf(width, SIZE * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
+            vertexArray.addAll(listOf(width, Main.gridSize * y.toFloat(), 0f, 0.2f, 0.2f, 0.2f, 1f))
             indexArray.add(vertexArray.size / 7 - 1)
         }
 
         vertices = vertexArray.toFloatArray()
         indices = indexArray.toIntArray()
+
+        updateVAO()
     }
 
     fun update() {
-        position.x = -ceil(Camera.position.x / SIZE) * SIZE
-        position.y = -ceil(Camera.position.y / SIZE) * SIZE
+        position.x = -ceil(Camera.position.x / Main.gridSize) * Main.gridSize
+        position.y = -ceil(Camera.position.y / Main.gridSize) * Main.gridSize
 
         if (Keyboard.isKeyPressed(GLFW.GLFW_KEY_G))
             visible = !visible

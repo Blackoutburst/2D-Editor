@@ -24,6 +24,7 @@ import java.io.File
 
 class Main {
     companion object {
+        var gridSize = 100
         val textureFolder = File("./EditorFiles/tileTextures")
     }
 }
@@ -54,16 +55,26 @@ fun update() {
     TilePanel.refreshPanel()
 
     while (Window.isOpen) {
+        LayerPanel.selected?.let {
+            if (it.gridSize != Main.gridSize) {
+                Main.gridSize = it.gridSize
+                Grid.generate()
+            }
+
+        }
+
+        LayerPanel.update()
+
         TilesManager.update()
 
         Grid.update()
         Axis.update()
         TilePanel.update()
-        LayerPanel.update()
+
 
         CameraController.update()
         if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
-            val mp = Mouse.getScreenPositionAlign(100)
+            val mp = Mouse.getScreenPositionAlign(Main.gridSize)
 
             LayerPanel.selected?.let { layer ->
                 TilesManager.getTile(layer, Vector2f(mp.x, mp.y))?.let {
@@ -73,13 +84,13 @@ fun update() {
                 TilePanel.selected?.let { tile ->
                     TilesManager.addTile(
                         layer,
-                        Tile(tile, Vector2f(mp.x, mp.y), Vector2f(100f), Color.WHITE)
+                        Tile(tile, Vector2f(mp.x, mp.y), Vector2f(Main.gridSize.toFloat()), Color.WHITE)
                     )
                 }
             }
         }
         if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
-            val mp = Mouse.getScreenPositionAlign(100)
+            val mp = Mouse.getScreenPositionAlign(Main.gridSize)
 
             LayerPanel.selected?.let { layer ->
                 TilesManager.getTile(layer, Vector2f(mp.x, mp.y))?.let {
