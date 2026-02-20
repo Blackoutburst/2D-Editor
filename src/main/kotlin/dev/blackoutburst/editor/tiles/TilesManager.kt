@@ -4,6 +4,7 @@ import dev.blackoutburst.bogel.camera.Camera
 import dev.blackoutburst.bogel.graphics.Text
 import dev.blackoutburst.bogel.graphics.Texture
 import dev.blackoutburst.bogel.graphics.TextureArray
+import dev.blackoutburst.bogel.input.Keyboard
 import dev.blackoutburst.bogel.maths.Matrix
 import dev.blackoutburst.bogel.maths.Vector2f
 import dev.blackoutburst.bogel.shader.Shader
@@ -11,12 +12,15 @@ import dev.blackoutburst.bogel.shader.ShaderProgram
 import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
+import org.lwjgl.glfw.GLFW.GLFW_KEY_O
+import org.lwjgl.glfw.GLFW.GLFW_KEY_W
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.Platform
 
 object TilesManager {
     private val missingTexture = Texture("textures/error.png")
+    private var showLayer = 0f
 
     var layers = mutableListOf(
         TileLayer(
@@ -120,7 +124,12 @@ object TilesManager {
         }
     }
 
-    fun update() {}
+    fun update() {
+        if (Keyboard.isKeyPressed(GLFW_KEY_O)) {
+            showLayer = if (showLayer == 0f) 1f else 0f
+            println(showLayer)
+        }
+    }
 
     fun render() {
         for (layer in layers) {
@@ -148,9 +157,12 @@ object TilesManager {
                 -1f, 1f
             ))
             shaderProgram.setUniformMat4("view", originView)
+            shaderProgram.setUniform1f("showLayer", 0f)
 
             generateLayerFramebuffer(layer)
 
+            shaderProgram.setUniform1f("showLayer", showLayer)
+            shaderProgram.setUniform4f("layerColor", layer.color.color)
             shaderProgram.setUniformMat4("projection", Camera.projection2D)
             shaderProgram.setUniformMat4("view", Camera.view)
 
