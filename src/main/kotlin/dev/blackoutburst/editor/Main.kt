@@ -20,6 +20,7 @@ import dev.blackoutburst.editor.tiles.TilesManager
 import dev.blackoutburst.editor.ui.LayerPanel
 import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL
 import org.lwjgl.glfw.GLFW.GLFW_KEY_O
 import org.lwjgl.glfw.GLFW.GLFW_KEY_S
 import org.lwjgl.glfw.GLFW.glfwSetDropCallback
@@ -31,6 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class Main {
     companion object {
         var gridSize = 100
+        var dragMode = false
         val textureFolder = File("./EditorFiles/tileTextures")
         val queue: ConcurrentLinkedQueue<() -> Unit> = ConcurrentLinkedQueue()
     }
@@ -74,6 +76,8 @@ fun update() {
 
         }
 
+        Main.dragMode = Keyboard.isKeyDown(GLFW_KEY_LEFT_CONTROL)
+
         LayerPanel.update()
 
         TilesManager.update()
@@ -100,13 +104,13 @@ fun update() {
             }
         }
 
-        if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON)) {
+        if (Mouse.isButtonPressed(Mouse.LEFT_BUTTON) || (Main.dragMode && Mouse.isButtonDown(Mouse.LEFT_BUTTON))) {
             val mp = Mouse.getScreenPositionAlign(Main.gridSize)
 
             LayerPanel.selected?.let { layer ->
                 TilesManager.getTile(layer, Vector2f(mp.x, mp.y))?.let {
-                TilesManager.removeTile(layer, it)
-            }
+                    TilesManager.removeTile(layer, it)
+                }
 
                 TilePanel.selected?.let { tile ->
                     TilesManager.addTile(
@@ -116,7 +120,8 @@ fun update() {
                 }
             }
         }
-        if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON)) {
+
+        if (Mouse.isButtonPressed(Mouse.RIGHT_BUTTON) || (Main.dragMode && Mouse.isButtonDown(Mouse.RIGHT_BUTTON))) {
             val mp = Mouse.getScreenPositionAlign(Main.gridSize)
 
             LayerPanel.selected?.let { layer ->
