@@ -20,10 +20,7 @@ import dev.blackoutburst.editor.tiles.TilesManager
 import dev.blackoutburst.editor.ui.LayerPanel
 import dev.blackoutburst.editor.ui.TilePanel
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL
-import org.lwjgl.glfw.GLFW.GLFW_KEY_O
-import org.lwjgl.glfw.GLFW.GLFW_KEY_S
-import org.lwjgl.glfw.GLFW.glfwSetDropCallback
+import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY
 import java.io.File

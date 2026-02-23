@@ -13,8 +13,6 @@ import dev.blackoutburst.bogel.utils.stack
 import dev.blackoutburst.bogel.window.Window
 import dev.blackoutburst.editor.Main
 import org.lwjgl.glfw.GLFW.GLFW_KEY_K
-import org.lwjgl.glfw.GLFW.GLFW_KEY_O
-import org.lwjgl.glfw.GLFW.GLFW_KEY_W
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.Platform
